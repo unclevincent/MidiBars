@@ -1,0 +1,5 @@
+# Vertex Arrays (opengl original)
+- bind vertex buffers with certain kind of specification for the layout of the vertex buffer
+- Vertex Array contain properties about a vertex buffer
+- bind that vertex specification that we specify by using that vertex attrib pointer to an actual vertex buffer
+ By layout is meant the layout of the buffer, like how it is meant to be interpreted
