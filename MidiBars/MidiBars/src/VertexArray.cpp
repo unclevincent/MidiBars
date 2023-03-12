@@ -1,4 +1,5 @@
 #include "VertexArray.h"
+#include "VertexBufferLayout.h"
 #include "Renderer.h"
 
 VertexArray::VertexArray()
@@ -25,13 +26,12 @@ void VertexArray::addBuffer(VertexBuffer const& buffer, VertexBufferLayout const
 {
 	bind();
 	buffer.bind();
-	const auto& elements = layout.getElements();
+	std::vector<VertexBufferElement> const& elements = layout.getElements();
 	unsigned int offset = 0;
 	for (unsigned int i = 0; i < elements.size(); ++i) {
-		const auto& element = elements[i];
-		GLCall(glEnableVertexAttribArray(i));
+		VertexBufferElement const& element = elements[i];
+		GLCall(glEnableVertexAttribArray(i)); // attributes might have multiple elements occupied in buffer, the i is their "grouped" index
 		GLCall(glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.getStride(), (const void*)offset)); // this links vertexArrayObject to currently bound buffer, layout of vertex buffer
 		offset += element.count * VertexBufferElement::getSizeOfType(element.type);
 	}
-
 }

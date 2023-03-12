@@ -8,6 +8,7 @@
 
 #include "Renderer.h"
 #include "VertexBuffer.h"
+#include "VertexBufferLayout.h"
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
@@ -52,7 +53,7 @@ int main(void)
         VertexBuffer vertexBuffer(positions, 4 * 2 * sizeof(float));
 
         VertexBufferLayout bufferLayout;
-        bufferLayout.push<float>(2);
+        bufferLayout.push<float>(2); // so many units of information 
         vertexArray.addBuffer(vertexBuffer, bufferLayout);
 
       
@@ -60,7 +61,6 @@ int main(void)
 
         Shader shader("res/shaders/basic.shader");
         shader.bind();
-
         shader.setUniform4f("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
 
         vertexArray.unbind();
@@ -68,20 +68,20 @@ int main(void)
         indexBuffer.unbind();
         shader.unbind();
 
+        Renderer renderer;
+
         float r = 0.0f;
         float increment = 0.05f;
         while (!glfwWindowShouldClose(window))
         {
             /* Render here */
-            glClear(GL_COLOR_BUFFER_BIT);
+            renderer.clear();
 
             shader.bind();
             shader.setUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
 
-            vertexArray.bind();
-            indexBuffer.bind();
-
-            GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+            renderer.draw(vertexArray, indexBuffer, shader);
+            
             if (r > 1.0f) {
                 increment = -0.05f;
             }
