@@ -12,6 +12,7 @@
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "Texture.h"
 
 
 int main(void)
@@ -42,18 +43,22 @@ int main(void)
     std::cout << glGetString(GL_VERSION) << std::endl;
     {
         float positions[] = {
-            -.5f, -.5f,
-            .5f, -.5f,
-            .5f, .5f,
-            -.5f, .5f,
+            -.5f, -.5f, 0.0f, 0.0f,
+            .5f, -.5f, 1.0f, 0.0f, 
+            .5f, .5f, 1.0f, 1.0f,
+            -.5f, .5f, 0.0f, 1.0f
         };
         unsigned int indices[] = { 0,1,2,2,3,0 };
 
+        GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+        GLCall(glEnable(GL_BLEND));
+
         VertexArray vertexArray;
-        VertexBuffer vertexBuffer(positions, 4 * 2 * sizeof(float));
+        VertexBuffer vertexBuffer(positions, 4 * 4 * sizeof(float));
 
         VertexBufferLayout bufferLayout;
         bufferLayout.push<float>(2); // so many units of information 
+        bufferLayout.push<float>(2);
         vertexArray.addBuffer(vertexBuffer, bufferLayout);
 
       
@@ -62,6 +67,10 @@ int main(void)
         Shader shader("res/shaders/basic.shader");
         shader.bind();
         shader.setUniform4f("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
+
+        Texture texture("res/textures/PNG_transparency_demonstration_1.png");
+        texture.bind();
+        shader.setUniform1i("u_Texture", 0);
 
         vertexArray.unbind();
         vertexBuffer.unbind();
@@ -79,6 +88,8 @@ int main(void)
 
             shader.bind();
             shader.setUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
+
+
 
             renderer.draw(vertexArray, indexBuffer, shader);
             

@@ -19,15 +19,15 @@ public:
 
 	// set uniforms
 	void setUniform4f(std::string const& name, float v0, float v1, float v2, float v3);
-	
+	void setUniform1i(std::string const& name, int i);
+
 private:
 	unsigned int _rendererID;
 	std::string _filepath;
-	std::unordered_map<std::string, unsigned int> _uniformLocationCache;
+	std::unordered_map<std::string, int> _uniformLocationCache;
 	ShaderProgramSource parseShader(std::string const& filepath);
 	unsigned int compileShader(unsigned int type, std::string const& source);
 	unsigned int createShader(std::string const& vertexShader, std::string const& fragmentShader);
-	unsigned int getUniformLocation(std::string const& name);
-	bool compileShader();
+	int getUniformLocation(std::string const& name);
 	// caching for uniforms
 };
