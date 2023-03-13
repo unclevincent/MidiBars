@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <unordered_map>
+#include "glm/glm.hpp"
 
 class Shader {
 public:
@@ -20,6 +21,7 @@ public:
 	// set uniforms
 	void setUniform4f(std::string const& name, float v0, float v1, float v2, float v3);
 	void setUniform1i(std::string const& name, int i);
+	void setUniformMatrix4f(std::string const& name, glm::mat4 const& matrix);
 
 private:
 	unsigned int _rendererID;
